@@ -17,27 +17,13 @@ repository root or from the package directory.
 """
 
 HERE = Path(__file__).resolve().parent
-
-# Heuristic: find the ancestor directory that contains a sibling `src` folder
-# and add it to sys.path so imports like `from src.data_prep import ...` work
-REPO_ROOT = HERE
-for _ in range(6):
-    if (REPO_ROOT / "src").is_dir():
-        break
-    REPO_ROOT = REPO_ROOT.parent
-
+REPO_ROOT = HERE.parent.parent
 for candidate in (str(HERE), str(REPO_ROOT)):
     if candidate not in sys.path:
         sys.path.insert(0, candidate)
 
-# Prefer package-relative imports when executed as a package, fall back
-# to top-level local imports when executed as a script.
-try:
-    from .calibrate import calibrate_simulator, generate_directional_augmentation, load_real_spy_csv
-    from .simulator import BoidsMarketSimulator
-except Exception:
-    from calibrate import calibrate_simulator, generate_directional_augmentation, load_real_spy_csv
-    from simulator import BoidsMarketSimulator
+from calibrate import calibrate_simulator, generate_directional_augmentation, load_real_spy_csv
+from simulator import BoidsMarketSimulator
 
 def parse_args() -> argparse.Namespace:
     """Build and return the CLI argument parser.

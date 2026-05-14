@@ -18,10 +18,10 @@ import sys
 import pandas as pd
 
 try:
-    from .simulator import BoidsMarketSimulator
-except Exception:
-    # When running as a script inside the package directory the relative
-    # import may fail; fall back to a local import path so the module is import-safe.
+    from simulator import BoidsMarketSimulator
+except ModuleNotFoundError:
+    # When running as a script inside the package directory the import
+    # may fail; fall back to a local import path so the module is import-safe.
     _HERE = Path(__file__).resolve().parent
     if str(_HERE) not in sys.path:
         sys.path.insert(0, str(_HERE))
